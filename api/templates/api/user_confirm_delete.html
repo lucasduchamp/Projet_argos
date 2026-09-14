@@ -1,0 +1,19 @@
+{% extends 'api/base.html' %}
+
+{% block content %}
+<div class="card col-md-6 mx-auto border-danger shadow-sm">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0">Supprimer l'utilisateur</h5>
+    </div>
+    <div class="card-body">
+        <p>Voulez-vous vraiment supprimer définitivement <strong>{{ user.email }}</strong> ?</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="d-flex justify-content-between">
+                <a href="{% url 'user_list' %}" class="btn btn-secondary">Annuler</a>
+                <button type="submit" class="btn btn-danger">Supprimer</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -74,8 +75,12 @@ WSGI_APPLICATION = 'ARGOS.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'Accounts',
+        'USER': 'loutan',
+        'PASSWORD': 'MotDePasseFort_Loutan',  # Vide par défaut sur XAMPP
+        'HOST': '72.60.185.73',
+        'PORT': '3306',
     }
 }
 
