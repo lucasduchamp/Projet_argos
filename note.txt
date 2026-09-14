@@ -1,0 +1,77 @@
+pour creer un nouveau projet : django-admin startproject ARGOS  . 
+pour creer une application (API) : python manage.py startapp api
+pour generer la base de donnee : python manage.py migrate 
+pour activer l'environement virtuelle : .\venv\Scripts\Activate.ps1
+
+______________________________________________________________________________________________________________
+INSTALATION DE L'ENVIRONEMENT VIRTUELLE :
+
+
+python -m venv --without-pip .venv
+
+.venv\Scripts\Activate.ps1
+
+python -m ensurepip --upgrade
+
+python -m pip install --upgrade pip
+
+python -m pip install django
+______________________________________________________________________________________________________________
+
+
+Lors de changement dans les base de donne :
+
+Modifiez les modèles (dans models.py).
+
+Exécutez python manage.py makemigrations pour créer des migrations correspondant à ces changements.
+
+Exécutez python manage.py migrate pour appliquer ces modifications à la base de données.
+
+______________________________________________________________________________________________________________
+
+CREATION D'UTILISATEUR 
+
+py manage.py createsuperuser
+
+
+___________________________________________________________________________________________________________________________
+
+
+Pour se connecter a distance en nn en local a https://pma.wolfox.fr/index.php?route=/database/export&db=Accounts
+il faudrait les autorisation + adresse ip 
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'Accounts',
+        'USER': 'django_user',  # L'utilisateur avec l'hôte '%'
+        'PASSWORD': 'mot_de_passe_robuste',
+        'HOST': 'wolfox.fr',  # Ou l'adresse IP du serveur (ex: '72.60.185.73')
+        'PORT': '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
+    }
+}
+
+
+
+
+
+
+
+
+#La mecanique du SQL 
+## Tu appelles la fonction .raw()utilisateurs = UserAccount.objects.raw("SELECT * FROM Users WHERE status = 'active'")
+
+
+
+
+
+
+
+
+
+bootstrap sur w3school

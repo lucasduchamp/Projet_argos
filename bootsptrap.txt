@@ -1,0 +1,97 @@
+BOOTSTRAP 5
+
+Bootstrap est un framework front-end
+___________________________________________________________________________________________________________________________
+
+il concu selon un approche mobil-first donc le format mobile en priorite 
+___________________________________________________________________________________________________________________________
+
+
+La .container  classe fournit un conteneur à largeur fixe réactif
+Cette .container-fluidclasse fournit un conteneur pleine largeur , occupant toute la largeur de la fenêtre d'affichage.
+
+___________________________________________________________________________________________________________________________
+
+pour creer un systeme de grille 
+
+on doit creer une class row 
+    puis selon les choix effectue col qui divisera la page en nombre de colonne ou bien .col-*-* avec comme premier
+    * la taille ( sm, md, lg, xl ou xxl ) et en deuxime  représente un nombre, dont la somme doit être égale à 12 pour chaque ligne.
+
+___________________________________________________________________________________________________________________________
+
+pour defenir les couleur de police il sont predefini comme ceci 
+
+  <p class="text-muted">This text is muted.</p>
+  <p class="text-primary">This text is important.</p>
+  <p class="text-success">This text indicates success.</p>
+  <p class="text-info">This text represents some information.</p>
+  <p class="text-warning">This text represents a warning.</p>
+  <p class="text-danger">This text represents danger.</p>
+  <p class="text-secondary">Secondary text.</p>
+  <p class="text-dark">This text is dark grey.</p>
+  <p class="text-body">Default body color (often black).</p>
+  <p class="text-light">This text is light grey (on white background).</p>
+  <p class="text-white">This text is white (on white background).</p>
+
+  si on a besoin d'une autre couleurs il faut utiliser style="color: #votre-code;"
+
+
+______________________________________________________________________________________________________________
+
+
+pour les fond de couleur nous avons  
+
+ <div class="bg-primary p-3"></div>
+  <div class="bg-success p-3"></div>
+  <div class="bg-info p-3"></div>
+  <div class="bg-warning p-3"></div>
+  <div class="bg-danger p-3"></div>
+  <div class="bg-secondary p-3"></div>
+  <div class="bg-dark p-3"></div>
+  <div class="bg-light p-3"></div>
+
+
+
+___________________________________________________________________________________________________________________________
+
+
+Est lorsque il y a du texte nous avons 
+
+  <p class="text-bg-primary">This text is important.</p>
+  <p class="text-bg-success">This text indicates success.</p>
+  <p class="text-bg-info">This text represents some information.</p>
+  <p class="text-bg-warning">This text represents a warning.</p>
+  <p class="text-bg-danger">This text represents danger.</p>
+  <p class="text-bg-secondary">Secondary background color.</p>
+  <p class="text-bg-dark">Dark grey background color.</p>
+  <p class="text-bg-light">Light grey background color.</p>
+
+
+
+______________________________________________________________________________________________________________
+
+
+pour les bouton 
+
+<button type="button" class="btn">Basic</button>
+<button type="button" class="btn btn-primary">Primary</button>
+<button type="button" class="btn btn-secondary">Secondary</button>
+<button type="button" class="btn btn-success">Success</button>
+<button type="button" class="btn btn-info">Info</button>
+<button type="button" class="btn btn-warning">Warning</button>
+<button type="button" class="btn btn-danger">Danger</button>
+<button type="button" class="btn btn-dark">Dark</button>
+<button type="button" class="btn btn-light">Light</button>
+<button type="button" class="btn btn-link">Link</button>
+
+
+
+
+
+
+
+
+
+
+
