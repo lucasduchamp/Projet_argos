@@ -1,0 +1,106 @@
+DOCUMENTATION DÉTAILLÉE : MODULE UTILISATEUR (CRUDL) - PROJET ARGOS
+Cette documentation explique les mécanismes internes du framework Django utilisés pour créer la gestion des utilisateurs.
+
+1. LE MODÈLE (api/models.py) : La couche Base de Données
+Le modèle est la traduction en Python d'une table SQL.
+
+class UserAccount(models.Model):
+En héritant de models.Model, cette classe gagne des "super-pouvoirs" (l'ORM de Django). L'ORM permet de faire des requêtes (SELECT, INSERT, UPDATE, DELETE) en utilisant du code Python classique au lieu d'écrire du code SQL brut (ex: UserAccount.objects.all() au lieu de SELECT * FROM Users).
+
+Les attributs de champs (blank=True, null=True) :
+
+null=True : C'est une consigne pour la base de données. Cela autorise la colonne SQL à contenir la valeur NULL.
+
+blank=True : C'est une consigne pour les formulaires Django. Cela autorise un champ HTML à être laissé vide lors de la soumission.
+
+class Meta:
+C'est la classe de configuration du modèle.
+
+db_table = 'Users' : Django nomme ses tables nom_app_nom_modele (ici api_useraccount). On le force à utiliser le nom exact Users pour correspondre à ta base existante.
+
+managed = False : Essentiel. Cela dit à Django : "Ne touche pas à la structure de cette table avec tes migrations". Django ne fera jamais de CREATE TABLE, ALTER TABLE ou DROP TABLE dessus. Il se contente de la lire et d'y écrire des lignes.
+
+2. LE FORMULAIRE (api/forms.py) : Le traducteur Python <-> HTML
+Plutôt que d'écrire chaque balise <input> à la main dans le HTML, Django les génère.
+
+class UserAccountForm(forms.ModelForm):
+Le ModelForm est magique : il inspecte le modèle UserAccount et crée automatiquement les champs de formulaire correspondants (un CharField devient un <input type="text">, un DateField devient un calendrier, etc.).
+
+fields = [...]
+Par sécurité, on liste explicitement les champs que l'utilisateur a le droit de modifier. On omet volontairement des champs comme created_at (géré par le système) ou failed_login_attempts.
+
+Le dictionnaire widgets : L'intégration Bootstrap
+C'est ici qu'on fait le lien avec le design. Un "widget" est la représentation HTML d'un champ.
+
+Python
+'email': forms.EmailInput(attrs={'class': 'form-control'})
+Ici, on dit à Django : "Pour le champ email, génère une balise <input type="email"> et ajoute-lui l'attribut HTML class="form-control"". C'est cette classe qui applique le style visuel de Bootstrap (bordures arrondies, effet bleuté au clic).
+
+3. LES VUES (api/views.py) : Le cerveau (Contrôleurs)
+C'est la logique métier. Chaque fonction reçoit un objet request (qui contient toutes les infos de la requête HTTP : navigateur, IP, données du formulaire) et doit retourner une réponse HTTP (une page HTML ou une redirection).
+
+A. La Liste (user_list)
+
+UserAccount.objects.all().order_by('-created_at') : L'ORM fait un SELECT * FROM Users ORDER BY created_at DESC. Le - signifie ordre décroissant (les plus récents en premier).
+
+return render(request, '...', {'users': users}) : Le dictionnaire {'users': users} est le "contexte". Il permet d'envoyer la variable Python users vers le fichier HTML pour qu'elle y soit affichée.
+
+B. La Création (user_create) et la Modification (user_update)
+Ces vues gèrent deux étapes : l'affichage du formulaire (GET) et la sauvegarde des données (POST).
+
+Python
+if request.method == 'POST':
+    form = UserAccountForm(request.POST) # ou instance=user pour l'update
+Si le navigateur envoie des données (POST), on remplit le formulaire avec ces données (request.POST).
+
+if form.is_valid(): : Django vérifie tout automatiquement (L'email est-il au bon format ? Les champs obligatoires sont-ils remplis ?). Si oui, il continue.
+
+user = form.save() : Transforme les données du formulaire en requête INSERT (ou UPDATE) en base de données.
+
+return redirect('user_detail', pk=user.pk) : Post-Get-Redirect pattern. Après une action d'écriture réussie, on ne renvoie pas de HTML, on redirige le navigateur. Cela évite que l'utilisateur ne crée un doublon s'il rafraîchit la page (F5).
+
+C. Le Détail et la Suppression
+
+get_object_or_404(UserAccount, pk=pk) : Cherche l'utilisateur avec l'ID (Primary Key) demandé. S'il n'existe pas (ex: l'utilisateur a tapé ID 9999 dans l'URL), Django arrête tout et affiche proprement une page "Erreur 404 - Introuvable", au lieu de faire planter le serveur avec une erreur 500.
+
+4. LE ROUTAGE (api/urls.py & ARGOS/urls.py) : L'aiguilleur
+Le système d'URL relie une adresse tapée dans le navigateur à une fonction Python.
+
+path('users/<int:pk>/', views.user_detail, name='user_detail')
+
+La route ('users/<int:pk>/') : <int:pk> est une variable dynamique. Si l'URL est /users/5/, Django capture 5 et le passe à la fonction user_detail(request, pk=5).
+
+La fonction (views.user_detail) : Le code à exécuter.
+
+Le nom (name='user_detail') : Un concept fondamental. Plutôt que d'écrire des URLs en dur dans le HTML (ex: <a href="/users/5/">), on utilise ce nom. Si demain tu décides de changer l'URL en /utilisateurs/profil/5/, tu as juste à modifier ce fichier urls.py. Tout le reste de ton site s'adaptera automatiquement.
+
+5. LES TEMPLATES (HTML) : La couche Présentation
+Les templates utilisent le Django Template Language (DTL), qui permet d'insérer de la logique (boucles, conditions) dans du HTML.
+
+A. L'Héritage (Le système de Blocs)
+
+Le fichier base.html contient le code commun (balises <head>, menus de navigation Bootstrap, pied de page).
+
+La balise {% block content %}{% endblock %} définit un "trou" dans ce squelette.
+
+Dans user_list.html, la première ligne est {% extends 'api/base.html' %}. Quand Django lit ce fichier, il prend le contenu situé dans le {% block content %} du fichier enfant et vient l'insérer dans le "trou" du fichier parent. Cela garantit un design homogène sans dupliquer de code.
+
+B. La syntaxe DTL
+
+{{ variable }} : Double accolade pour afficher une donnée envoyée par la vue. Ex: {{ user.email }} affiche l'adresse email.
+
+{% instruction %} : Accolade-pourcentage pour la logique.
+
+{% for u in users %} : Boucle qui crée une ligne de tableau <tr> pour chaque utilisateur trouvé en base.
+
+{% url 'user_detail' u.pk %} : Le routeur inversé. Il demande à Django : "Génère l'URL complète pour la vue nommée 'user_detail', en utilisant l'ID u.pk".
+
+{% csrf_token %} : Une mesure de sécurité indispensable pour les formulaires. Django génère un jeton unique caché empêchant les attaques de type Cross-Site Request Forgery (où un site malveillant forcerait le navigateur de ton utilisateur à soumettre le formulaire à son insu).
+
+C. Les filtres de Template
+
+{{ u.first_name|default:'' }} : Le symbole | est un filtre. Si first_name est vide (None en base), Django n'affichera rien au lieu d'afficher le mot moche "None".
+
+{{ u.two_factor_enabled|yesno:"Oui,Non" }} : Transforme un booléen (True/False de la base de données) en texte lisible pour l'humain.
+
+{{ user.get_status_display }} : Une méthode secrète de Django. Parce que ton statut utilise des "Choices" dans ton modèle (ex: PENDING, ACTIVE), user.status afficherait "pending" (la valeur en base). En ajoutant get_..._display, Django lit le label humainement lisible ("En attente").

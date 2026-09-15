@@ -1,12 +1,12 @@
 {% extends 'api/base.html' %}
 
 {% block content %}
-<div class="card col-md-8 mx-auto shadow-sm">
-    <div class="card-header d-flex justify-content-between align-items-center">
+<div class="">
+    <div class="">
         <h4 class="mb-0">{{ user.first_name }} {{ user.last_name }}</h4>
-        <span class="badge bg-primary">{{ user.get_status_display }}</span>
+        <span class="">{{ user.get_status_display }}</span>
     </div>
-    <div class="card-body">
+    <div class="">
         <p><strong>Email :</strong> {{ user.email }}</p>
         <p><strong>Mot de passe en clair :</strong> {{ user.password_hash }}</p>
         <p><strong>Pseudo :</strong> {{ user.nickname|default:'-' }}</p>
@@ -17,11 +17,11 @@
         <p><strong>2FA :</strong> {{ user.two_factor_enabled|yesno:"Activé,Désactivé" }}</p>
         <p><strong>Créé le :</strong> {{ user.created_at }}</p>
     </div>
-    <div class="card-footer d-flex justify-content-between">
+    <div class="">
         <a href="{% url 'user_list' %}" class="btn btn-secondary">Retour</a>
         <div>
-            <a href="{% url 'user_update' user.pk %}" class="btn btn-warning">Modifier</a>
-            <a href="{% url 'user_delete' user.pk %}" class="btn btn-danger">Supprimer</a>
+            <a href="{% url 'user_update' user.pk %}" class="">Modifier</a>
+            <a href="{% url 'user_delete' user.pk %}" class="">Supprimer</a>
         </div>
     </div>
 </div>

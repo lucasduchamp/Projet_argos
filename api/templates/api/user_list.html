@@ -1,14 +1,14 @@
 {% extends 'api/base.html' %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
+<div class="">
     <h2>Liste des utilisateurs</h2>
-    <a href="{% url 'user_create' %}" class="btn btn-primary">+ Nouveau</a>
+    <a href="{% url 'user_create' %}" class="">+ Nouveau</a>
 </div>
 
-<div class="card shadow-sm">
-    <table class="table table-hover table-striped mb-0">
-        <thead class="table-dark">
+<div class="">
+    <table class="table table-striped table-bordered">
+        <thead class="">
             <tr>
                 <th>ID</th>
                 <th>Nom complet</th>
@@ -23,16 +23,16 @@
                 <td>{{ u.pk }}</td>
                 <td>{{ u.first_name|default:'' }} {{ u.last_name|default:'' }}</td>
                 <td>{{ u.email }}</td>
-                <td><span class="badge bg-secondary">{{ u.get_status_display }}</span></td>
+                <td><span class="">{{ u.get_status_display }}</span></td>
                 <td>
-                    <a href="{% url 'user_detail' u.pk %}" class="btn btn-sm btn-info">Voir</a>
-                    <a href="{% url 'user_update' u.pk %}" class="btn btn-sm btn-warning">Modifier</a>
-                    <a href="{% url 'user_delete' u.pk %}" class="btn btn-sm btn-danger">Supprimer</a>
+                    <a href="{% url 'user_detail' u.pk %}" class="btn btn-primary ms-1">Voir</a>
+                    <a href="{% url 'user_update' u.pk %}" class="btn btn-success">Modifier</a>
+                    <a href="{% url 'user_delete' u.pk %}" class="btn btn-danger">Supprimer</a>
                 </td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="5" class="text-center py-4 text-muted">Aucun utilisateur enregistré.</td>
+                <td colspan="5" class="">Aucun utilisateur enregistré.</td>
             </tr>
             {% endfor %}
         </tbody>

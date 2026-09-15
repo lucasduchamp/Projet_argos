@@ -28,16 +28,3 @@ class UserAccountForm(forms.ModelForm):
             'avatar_id': 'ID Avatar',
             'two_factor_enabled': '2FA Activé',
         }
-        widgets = {
-            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control'}),
-            'password_hash': forms.TextInput(attrs={'class': 'form-control'}),
-            'nickname': forms.TextInput(attrs={'class': 'form-control'}),
-            'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
-            'birth_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'status': forms.Select(attrs={'class': 'form-select'}),
-            'address_id': forms.NumberInput(attrs={'class': 'form-control'}),
-            'avatar_id': forms.NumberInput(attrs={'class': 'form-control'}),
-            'two_factor_enabled': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-        }
